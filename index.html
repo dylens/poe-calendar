@@ -1,0 +1,192 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>诗词周历</title>
+        <link rel="stylesheet" href="assets/global.css">
+        <link rel="stylesheet" href="assets/skin.css">
+        <link rel="stylesheet" href="assets/semantic/components/container.min.css">
+        <link rel="stylesheet" href="assets/semantic/components/grid.min.css">
+        <link rel="stylesheet" href="assets/semantic/components/button.min.css">
+        <link rel="stylesheet" href="assets/semantic/components/icon.min.css">
+        <link rel="shortcut icon" href="assets/images/favicon_48_48.ico">
+    </head>
+    <body class="mo">
+        <div id="main" class="ui container">
+            <div style="position: absolute; top: -400px;">
+                <img src="assets/images/c.jpeg" />
+            </div>
+            <div class="inner">
+                <div class="today">
+                    <div id="todaySolar" class="solar">2018年10月5日</div>
+                    <div id="todayLunar" class="lunar">八月廿六</div>
+                </div>
+
+                <div class="ui equal width grid">
+                    <div class="thirteen wide column poetry-wrapper" style="padding: 0;">
+                        <table style="width: 100%;">
+                            <tr>
+                                <td valign="middle" align="center" class="poetry-content">
+                                    <div id="pcontent" class="uu">
+    别来春半,
+    触目柔肠断。
+    砌下落梅如雪乱，
+    拂了一身还满。
+    雁来音信无凭，
+    路遥归梦难成。
+    离恨恰如春草，
+    更行更远还生。
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="two wide column poetry-title uu" style="padding: 0;">
+                        <div id="ptitle" class="title">清平乐·别来春半</div>
+                        <div id="pauthor" class="author">李煜</div>
+                    </div>
+                </div>
+
+                <div class="calendar-wrapper">
+                    <div class="ui equal width grid">
+                        <div class="calendar row">
+                            <div id="w1" class="column w1">
+                                <div class="solar">1</div>
+                                <div class="lunar">周一</div>
+                            </div>
+                            <div id="w2" class="column w2">
+                                <div class="solar">2</div>
+                                <div class="lunar">周二</div>
+                            </div>
+                            <div id="w3" class="column w3">
+                                <div class="solar">3</div>
+                                <div class="lunar">周三</div>
+                            </div>
+                            <div id="w4" class="column w4">
+                                <div class="solar">4</div>
+                                <div class="lunar">周四</div>
+                            </div>
+                            <div id="w5" class="column w5">
+                                <div class="solar">5</div>
+                                <div class="lunar">周五</div>
+                            </div>
+                            <div id="w6" class="column w6">
+                                <div class="solar">6</div>
+                                <div class="lunar">周六</div>
+                            </div>
+                            <div id="w7" class="column w7">
+                                <div class="solar">7</div>
+                                <div class="lunar">周日</div>
+                            </div>
+                        </div>    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script src="assets/js/calendar.js"></script>
+    <script src="assets/js/web.js"></script>
+    <script src="assets/js/节日表.js"></script>
+    <script src="assets/js/诗词表.js"></script>
+
+    <script>
+        function render(t) {
+            var currentWeekNumber = weekNumber(t);
+            var currentMonday = monDay(t);
+            var currentWeeks = weekDays(currentMonday);
+
+            var day = calendar.solar2lunar(t.getFullYear(), t.getMonth() + 1, t.getDate());
+
+            var lunarDate = day.gzYear + day.IMonthCn + day.IDayCn;
+            var solarDate = day.cYear + '.' + day.cMonth + '.' + day.cDay + '   ' + day.ncWeek;
+
+            document.getElementById("todayLunar").innerHTML = lunarDate;
+            document.getElementById("todaySolar").innerHTML = solarDate;
+
+            // Poetry
+            var poetry = weekPoetry[currentWeekNumber[1] - 1];
+            if (poetry) {
+                document.getElementById("pcontent").innerHTML = poetry.content;
+                document.getElementById("ptitle").innerHTML = poetry.title;
+                document.getElementById("pauthor").innerHTML = poetry.author
+            }
+
+            var weekIds = ["w1", "w2", "w3", "w4", "w5", "w6", "w7"];
+
+            for (var i in weekIds) {
+                var id = weekIds[i];
+                var solar = currentWeeks[i];
+                var lunar = calendar.solar2lunar(
+                    solar.getFullYear(), 
+                    solar.getMonth() + 1, 
+                    solar.getDate()
+                );
+
+                var el = document.getElementById(id);
+
+                if (solar.getDate() === t.getDate()) {
+                    el.classList.add("active");
+                    if (lunar.lMonth === 8 && lunar.lDay === 26) {
+                        document.getElementById("pcontent").innerHTML = "祝你生日快乐，\n祝你生日快乐，\n祝你生日快乐，\n祝你生日快乐~~"
+                        document.getElementById("ptitle").innerHTML = "生日歌"
+                        document.getElementById("pauthor").innerHTML = "党中央"
+                    }
+                } else {
+                    el.classList.remove("active")
+                }
+
+                el.getElementsByClassName("solar")[0].innerHTML = lunar.cDay
+
+                var lunarElement = el.getElementsByClassName("lunar")[0]
+
+                var nextDay = new Date(solar.getFullYear(),  solar.getMonth(), solar.getDate())
+                nextDay.setDate(solar.getDate() + 1);
+            
+                var nextDay = calendar.solar2lunar(
+                    nextDay.getFullYear(), 
+                    nextDay.getMonth() + 1, 
+                    nextDay.getDate()
+                );
+
+                if (nextDay.IMonthCn + nextDay.IDayCn === '正月初一') {
+                    lunarElement.innerHTML = '除夕'
+                    continue
+                }
+
+                if (nextDay.Term === '清明') {
+                    lunarElement.innerHTML = '寒食'
+                    continue
+                }
+
+                if (lunar.IMonthCn + lunar.IDayCn in lundarDayMap) {
+                    lunarElement.innerHTML = lundarDayMap[lunar.IMonthCn + lunar.IDayCn]
+                    continue
+                }
+
+                if (lunar.cMonth + '.' + lunar.cDay in solarDayMap) {
+                    lunarElement.innerHTML = solarDayMap[lunar.cMonth + '.' + lunar.cDay]
+                    continue
+                }
+
+                if (lunar.Term) {
+                    lunarElement.innerHTML = lunar.Term
+                } else {
+                    lunarElement.innerHTML = lunar.IDayCn
+                }
+
+            }
+        }
+
+        render(new Date());
+        useWechat();
+
+        var skin = localStorage.getItem('skin');
+
+        if (skin) {
+            document.body.className = skin;
+        } else {
+            localStorage.setItem('skin', 'mo');
+        }
+    </script>
+</html>
