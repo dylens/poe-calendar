@@ -125,17 +125,6 @@
 
                 var el = document.getElementById(id);
 
-                if (solar.getDate() === t.getDate()) {
-                    el.classList.add("active");
-                    if (lunar.lMonth === 8 && lunar.lDay === 26) {
-                        document.getElementById("pcontent").innerHTML = "祝你生日快乐，\n祝你生日快乐，\n祝你生日快乐，\n祝你生日快乐~~"
-                        document.getElementById("ptitle").innerHTML = "生日歌"
-                        document.getElementById("pauthor").innerHTML = "党中央"
-                    }
-                } else {
-                    el.classList.remove("active")
-                }
-
                 el.getElementsByClassName("solar")[0].innerHTML = lunar.cDay
 
                 var lunarElement = el.getElementsByClassName("lunar")[0]
