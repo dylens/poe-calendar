@@ -56,32 +56,6 @@ function toggleWechat () {
     }
 }
 
-function useWechat () {
-    var wechat = document.getElementById("wechat");
-    var alipay = document.getElementById("alipay");
-    var wechatImage = document.getElementById("wechat-qrcode-image");
-    var alipayImage = document.getElementById("alipay-qrcode-image");
-
-    wechat.classList.add("active")
-    alipay.classList.remove("active")
-
-    wechatImage.style.display = "block"
-    alipayImage.style.display = "none"
-} 
-
-function useAlipay () {
-    var wechat = document.getElementById("wechat");
-    var alipay = document.getElementById("alipay");
-    var wechatImage = document.getElementById("wechat-qrcode-image");
-    var alipayImage = document.getElementById("alipay-qrcode-image");
-
-    alipay.classList.add("active")
-    wechat.classList.remove("active")
-
-    wechatImage.style.display = "none"
-    alipayImage.style.display = "block"
-} 
-
 function toggleById(ids, id) {
     closeOther(ids, id)
 

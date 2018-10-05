@@ -74,14 +74,6 @@ body {
     margin-bottom: 30px;
 }
 
-#donation-wrapper #wechat.active {
-    background-color: #44b549;
-}
-
-#donation-wrapper #alipay.active {
-    background-color: #059AE3;
-}
-
 #donation-wrapper #donation-qrcode img {
     max-width: 300px;
     margin: 20px auto;

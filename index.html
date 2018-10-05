@@ -87,25 +87,26 @@
 
     <script src="assets/js/calendar.js"></script>
     <script src="assets/js/web.js"></script>
-    <script src="assets/js/节日表.js"></script>
-    <script src="assets/js/诗词表.js"></script>
+    <script src="assets/js/festival.js"></script>
+    <script src="assets/js/poetry.js"></script>
 
     <script>
         function render(t) {
-            var currentWeekNumber = weekNumber(t);
-            var currentMonday = monDay(t);
-            var currentWeeks = weekDays(currentMonday);
+            var currentWeekNumber = weekNumber(t);//获取t(今天10.5)是2018年的第几周，第40周
+            var currentMonday = monDay(t);//获取t(今天10.5)所在的第40周的周一是哪天，10.1
+            var currentWeeks = weekDays(currentMonday);//获取以周一(currentMonday)为第一天的连续7天，10.1，10.2，10.3，10.4，10.5，10.6，10.7
 
-            var day = calendar.solar2lunar(t.getFullYear(), t.getMonth() + 1, t.getDate());
+            var day = calendar.solar2lunar(t.getFullYear(), t.getMonth() + 1, t.getDate());//阳历转农历
 
-            var lunarDate = day.gzYear + day.IMonthCn + day.IDayCn;
-            var solarDate = day.cYear + '.' + day.cMonth + '.' + day.cDay + '   ' + day.ncWeek;
+            var lunarDate = day.gzYear + day.IMonthCn + day.IDayCn;//戊戌八月廿六
+            var solarDate = day.cYear + '.' + day.cMonth + '.' + day.cDay + '   ' + day.ncWeek;//2018.10.5   星期四
 
-            document.getElementById("todayLunar").innerHTML = lunarDate;
-            document.getElementById("todaySolar").innerHTML = solarDate;
+            document.getElementById("todayLunar").innerHTML = lunarDate;//为html中id为todayLunar 赋值 戊戌八月廿六
+            document.getElementById("todaySolar").innerHTML = solarDate;//为html中id为todaySolar 赋值 2018.10.5   星期四
 
-            // Poetry
+            //poetry 按周数-1取weekPoetry数组中的诗词（因为数组下标从0开始，所以要-1）
             var poetry = weekPoetry[currentWeekNumber[1] - 1];
+            //判断当poetry存在时，进行赋值
             if (poetry) {
                 document.getElementById("pcontent").innerHTML = poetry.content;
                 document.getElementById("ptitle").innerHTML = poetry.title;
@@ -114,50 +115,60 @@
 
             var weekIds = ["w1", "w2", "w3", "w4", "w5", "w6", "w7"];
 
+            //循环获取w1至w7
             for (var i in weekIds) {
-                var id = weekIds[i];
-                var solar = currentWeeks[i];
+                var id = weekIds[i];//i为0时，获得w1
+                var solar = currentWeeks[i];//序号为i的阳历日期，i为0时，10.1
+                //calendar变量定义在calendar.js文件中，solar2lunar方法用来计算solar对应的阴历时间
                 var lunar = calendar.solar2lunar(
                     solar.getFullYear(), 
                     solar.getMonth() + 1, 
                     solar.getDate()
                 );
 
+                //获取id="w1" 的div控件
                 var el = document.getElementById(id);
-
-                el.getElementsByClassName("solar")[0].innerHTML = lunar.cDay
-
-                var lunarElement = el.getElementsByClassName("lunar")[0]
-
-                var nextDay = new Date(solar.getFullYear(),  solar.getMonth(), solar.getDate())
+                //为class为solar的第一个控件赋值，当前日期若为10.1，则lunar.cDay为1
+                el.getElementsByClassName("solar")[0].innerHTML = lunar.cDay;
+                //获取class为lunar的第一个控件
+                var lunarElement = el.getElementsByClassName("lunar")[0];
+                //用当前序号中的日期初始化变量nextDay
+                var nextDay = new Date(solar.getFullYear(),  solar.getMonth(), solar.getDate());
+                //为nextDay赋值当前日期+1
                 nextDay.setDate(solar.getDate() + 1);
-            
-                var nextDay = calendar.solar2lunar(
+
+                //由第二天的阳历日期计算第二天的农历
+                var nextLunar = calendar.solar2lunar(
                     nextDay.getFullYear(), 
                     nextDay.getMonth() + 1, 
                     nextDay.getDate()
                 );
 
-                if (nextDay.IMonthCn + nextDay.IDayCn === '正月初一') {
-                    lunarElement.innerHTML = '除夕'
+                //如果第二天是正月初一则将今天的农历内容替换为除夕，continue后就不再执行之后的语句，转而执行下一个for循环
+                if (nextLunar.IMonthCn + nextLunar.IDayCn === '正月初一') {
+                    lunarElement.innerHTML = '除夕';
                     continue
                 }
 
-                if (nextDay.Term === '清明') {
-                    lunarElement.innerHTML = '寒食'
+                //Term为节气，如果第二天的节气为清明则替换今天为寒食
+                if (nextLunar.Term === '清明') {
+                    lunarElement.innerHTML = '寒食';
                     continue
                 }
 
-                if (lunar.IMonthCn + lunar.IDayCn in lundarDayMap) {
-                    lunarElement.innerHTML = lundarDayMap[lunar.IMonthCn + lunar.IDayCn]
+                //判断当前农历日期是否在lunarDayMap中，lunarDayMap变量定义在festival.js文件中
+                if (lunar.IMonthCn + lunar.IDayCn in lunarDayMap) {
+                    lunarElement.innerHTML = lunarDayMap[lunar.IMonthCn + lunar.IDayCn];
                     continue
                 }
 
+                //判断当前阳历日期是否在solarDayMap中，solarDayMap变量定义在festival.js文件中
                 if (lunar.cMonth + '.' + lunar.cDay in solarDayMap) {
-                    lunarElement.innerHTML = solarDayMap[lunar.cMonth + '.' + lunar.cDay]
+                    lunarElement.innerHTML = solarDayMap[lunar.cMonth + '.' + lunar.cDay];
                     continue
                 }
 
+                //如果当前日期的节气不为空则赋值到lunarElement中，为空则用农历的标识，廿六
                 if (lunar.Term) {
                     lunarElement.innerHTML = lunar.Term
                 } else {
@@ -166,16 +177,7 @@
 
             }
         }
-
+        //传入今天作为参数，执行render方法
         render(new Date());
-        useWechat();
-
-        var skin = localStorage.getItem('skin');
-
-        if (skin) {
-            document.body.className = skin;
-        } else {
-            localStorage.setItem('skin', 'mo');
-        }
     </script>
 </html>

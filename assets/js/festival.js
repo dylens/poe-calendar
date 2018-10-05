@@ -1,4 +1,4 @@
-var lundarDayMap = {
+var lunarDayMap = {
     "正月初一": "春节",
     "正月十五": "元宵",
     "五月初五": "端午",
