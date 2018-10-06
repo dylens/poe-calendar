@@ -2,6 +2,7 @@ body {
     margin: 0;
     font-family: STKaiti, KaiTi, PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans;
     font-weight: 100;
+    /*cursor:url("images/m.ico"),auto;*/
 }
 
 #main .today {
@@ -259,9 +260,17 @@ body {
     }
 }  
 
-
 @media print {
     #main .inner #inner-top {
         display: none;
     }
+}
+
+.bg{
+    cursor: pointer;
+    -webkit-transition: all .5s;
+}
+
+.bg:hover{
+    background-color: #de4b46;
 }
