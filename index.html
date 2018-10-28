@@ -186,8 +186,6 @@
         }
 
         function changePoetry(id){
-            var currentWeeks = weekDays(monDay(new Date()));//获取一周
-		
             //随机获取43首诗中的一首
             var poetry = weekPoetry[Math.ceil(Math.random()*42)];
             if (poetry) {
@@ -196,6 +194,7 @@
                 document.getElementById("pauthor").innerHTML = poetry.author
             }
 			
+			var currentWeeks = weekDays(monDay(new Date()));//获取一周
 			//active当前点下的日期
 			var weekIds = ["w1", "w2", "w3", "w4", "w5", "w6", "w7"];
 			for(var i in weekIds){
