@@ -50,31 +50,31 @@
                 <div class="calendar-wrapper">
                     <div class="ui equal width grid">
                         <div class="calendar row">
-                            <div id="w1" class="column bg w1" onclick="changePoetry()">
+                            <div id="w1" class="column bg w1" onclick="changePoetry('w1')">
                                 <div class="solar">1</div>
                                 <div class="lunar">周一</div>
                             </div>
-                            <div id="w2" class="column bg w2" onclick="changePoetry()">
+                            <div id="w2" class="column bg w2" onclick="changePoetry('w2')">
                                 <div class="solar">2</div>
                                 <div class="lunar">周二</div>
                             </div>
-                            <div id="w3" class="column bg w3" onclick="changePoetry()">
+                            <div id="w3" class="column bg w3" onclick="changePoetry('w3')">
                                 <div class="solar">3</div>
                                 <div class="lunar">周三</div>
                             </div>
-                            <div id="w4" class="column bg w4" onclick="changePoetry()">
+                            <div id="w4" class="column bg w4" onclick="changePoetry('w4')">
                                 <div class="solar">4</div>
                                 <div class="lunar">周四</div>
                             </div>
-                            <div id="w5" class="column bg w5" onclick="changePoetry()">
+                            <div id="w5" class="column bg w5" onclick="changePoetry('w5')">
                                 <div class="solar">5</div>
                                 <div class="lunar">周五</div>
                             </div>
-                            <div id="w6" class="column bg w6" onclick="changePoetry()">
+                            <div id="w6" class="column bg w6" onclick="changePoetry('w6')">
                                 <div class="solar">6</div>
                                 <div class="lunar">周六</div>
                             </div>
-                            <div id="w7" class="column bg w7" onclick="changePoetry()">
+                            <div id="w7" class="column bg w7" onclick="changePoetry('w7')">
                                 <div class="solar">7</div>
                                 <div class="lunar">周日</div>
                             </div>
@@ -185,7 +185,7 @@
             }
         }
 
-        function changePoetry(){
+        function changePoetry(id){
             //随机获取43首诗中的一首
             var poetry = weekPoetry[Math.ceil(Math.random()*42)];
             if (poetry) {
@@ -193,6 +193,17 @@
                 document.getElementById("ptitle").innerHTML = poetry.title;
                 document.getElementById("pauthor").innerHTML = poetry.author
             }
+			
+			//active当前点下的日期
+			var weekIds = ["w1", "w2", "w3", "w4", "w5", "w6", "w7"];
+			for(var i in weekIds){
+				var el = document.getElementById(weekIds[i]);
+				if(id==weekIds[i]){
+					el.classList.add("active");
+				}else{
+					el.classList.remove("active");
+				}
+			}
         }
 
         //传入今天作为参数，执行render方法
