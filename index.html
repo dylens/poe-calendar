@@ -95,9 +95,9 @@
             var currentWeekNumber = weekNumber(t);//获取t(今天10.5)是2018年的第几周，第40周
             var currentMonday = monDay(t);//获取t(今天10.5)所在的第40周的周一是哪天，10.1
             var currentWeeks = weekDays(currentMonday);//获取以周一(currentMonday)为第一天的连续7天，10.1，10.2，10.3，10.4，10.5，10.6，10.7
-
+			
             var day = calendar.solar2lunar(t.getFullYear(), t.getMonth() + 1, t.getDate());//阳历转农历
-
+			
             var lunarDate = day.gzYear + day.IMonthCn + day.IDayCn;//戊戌八月廿六
             var solarDate = day.cYear + '.' + day.cMonth + '.' + day.cDay + '   ' + day.ncWeek;//2018.10.5   星期四
 
@@ -186,6 +186,8 @@
         }
 
         function changePoetry(id){
+            var currentWeeks = weekDays(monDay(new Date()));//获取一周
+		
             //随机获取43首诗中的一首
             var poetry = weekPoetry[Math.ceil(Math.random()*42)];
             if (poetry) {
@@ -198,8 +200,15 @@
 			var weekIds = ["w1", "w2", "w3", "w4", "w5", "w6", "w7"];
 			for(var i in weekIds){
 				var el = document.getElementById(weekIds[i]);
+				//alert(el.firstChild.innerHTML);
 				if(id==weekIds[i]){
 					el.classList.add("active");
+					var solar = currentWeeks[i];
+					var day = calendar.solar2lunar(solar.getFullYear(), solar.getMonth() + 1, solar.getDate());
+					var lunarDate = day.gzYear + day.IMonthCn + day.IDayCn;
+					var solarDate = day.cYear + '.' + day.cMonth + '.' + day.cDay + '   ' + day.ncWeek;
+					document.getElementById("todayLunar").innerHTML = lunarDate;
+					document.getElementById("todaySolar").innerHTML = solarDate; 
 				}else{
 					el.classList.remove("active");
 				}
