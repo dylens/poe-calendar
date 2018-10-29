@@ -16,16 +16,6 @@ function weekDays(current) {
     return week;
 }
 
-//计算日期d所在周的周一
-function monDay(d) {
-    d = new Date(d);
-    var day = d.getDay();
-    //如果day为0，说明今天是周日，要计算它所在周的周一要减去6
-    //如果day不为0，减去day后得到的为上周日，所以还要+1
-    var diff = d.getDate() - day + (day == 0 ? -6 : 1);
-    return new Date(d.setDate(diff));
-}
-
 //计算日期d的年份以及处于今年的第几周
 function weekNumber(d) {
     // 复制一个UTC时间的d，同时也为了不改变原始值

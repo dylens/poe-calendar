@@ -93,8 +93,8 @@
     <script>
         function render(t) {
             var currentWeekNumber = weekNumber(t);//获取t(今天10.5)是2018年的第几周，第40周
-            var currentMonday = monDay(t);//获取t(今天10.5)所在的第40周的周一是哪天，10.1
-            var currentWeeks = weekDays(currentMonday);//获取以周一(currentMonday)为第一天的连续7天，10.1，10.2，10.3，10.4，10.5，10.6，10.7
+            //var currentMonday = monDay(t);//获取t(今天10.5)所在的第40周的周一是哪天，10.1
+            var currentWeeks = weekDays(t);//获取以周一(currentMonday)为第一天的连续7天，10.1，10.2，10.3，10.4，10.5，10.6，10.7
 			
             var day = calendar.solar2lunar(t.getFullYear(), t.getMonth() + 1, t.getDate());//阳历转农历
 			
@@ -194,7 +194,7 @@
                 document.getElementById("pauthor").innerHTML = poetry.author
             }
 			
-			var currentWeeks = weekDays(monDay(new Date()));//获取一周
+			var currentWeeks = weekDays(new Date());//获取一周
 			//active当前点下的日期
 			var weekIds = ["w1", "w2", "w3", "w4", "w5", "w6", "w7"];
 			for(var i in weekIds){

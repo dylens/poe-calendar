@@ -1,15 +1,14 @@
 /**
 * @1900-2100区间内的公历、农历互转
 * @charset UTF-8
-* @公历转农历：calendar.solar2lunar(1987,11,01); //[you can ignore params of prefix 0]
-* @农历转公历：calendar.lunar2solar(1987,09,10); //[you can ignore params of prefix 0]
+* @公历转农历：calendar.solar2lunar(1987,11,01);
 */
 var calendar = {
 
     /**
-      * 农历1900-2100的润大小信息表
+      * 农历1900-2100的润月所在的月份信息表
       * @Array Of Property
-      * @return Hex 
+      * @return Hex
       */
     lunarInfo:[0x04bd8,0x04ae0,0x0a570,0x054d5,0x0d260,0x0d950,0x16554,0x056a0,0x09ad0,0x055d2,//1900-1909
             0x04ae0,0x0a5b6,0x0a4d0,0x0d250,0x1d255,0x0b540,0x0d6a0,0x0ada2,0x095b0,0x14977,//1910-1919
@@ -26,7 +25,7 @@ var calendar = {
             0x07954,0x06aa0,0x0ad50,0x05b52,0x04b60,0x0a6e6,0x0a4e0,0x0d260,0x0ea65,0x0d530,//2020-2029
             0x05aa0,0x076a3,0x096d0,0x04afb,0x04ad0,0x0a4d0,0x1d0b6,0x0d250,0x0d520,0x0dd45,//2030-2039
             0x0b5a0,0x056d0,0x055b2,0x049b0,0x0a577,0x0a4b0,0x0aa50,0x1b255,0x06d20,0x0ada0,//2040-2049
-            0x14b63,0x09370,0x049f8,0x04970,0x064b0,0x168a6,0x0ea50, 0x06b20,0x1a6c4,0x0aae0,//2050-2059
+            0x14b63,0x09370,0x049f8,0x04970,0x064b0,0x168a6,0x0ea50,0x06b20,0x1a6c4,0x0aae0,//2050-2059
             0x0a2e0,0x0d2e3,0x0c960,0x0d557,0x0d4a0,0x0da50,0x05d55,0x056a0,0x0a6d0,0x055d4,//2060-2069
             0x052d0,0x0a9b8,0x0a950,0x0b4a0,0x0b6a6,0x0ad50,0x055a0,0x0aba4,0x0a5b0,0x052b0,//2070-2079
             0x0b273,0x06930,0x07337,0x06aa0,0x0ad50,0x14b55,0x04b60,0x0a570,0x054e4,0x0d160,//2080-2089
@@ -57,9 +56,9 @@ var calendar = {
 
     /**
       * 天干地支之地支速查表<=>生肖
-      * @Array Of Property 
+      * @Array Of Property
       * @trans["鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪"]
-      * @return Cn string 
+      * @return Cn string
       */
     Animals:["\u9f20","\u725b","\u864e","\u5154","\u9f99","\u86c7","\u9a6c","\u7f8a","\u7334","\u9e21","\u72d7","\u732a"],
 
@@ -215,22 +214,6 @@ var calendar = {
     },
 
     /**
-      * 返回公历(!)y年m月的天数
-      * @param solar Year
-      * @return Number (-1、28、29、30、31)
-      * @eg:var solarMonthDay = calendar.leapDays(1987) ;//solarMonthDay=30
-      */
-    solarDays:function(y,m) {
-        if(m>12 || m<1) {return -1} //若参数错误 返回-1
-        var ms = m-1;
-        if(ms==1) { //2月份的闰平规律测算后确认返回28或29
-            return(((y%4 == 0) && (y%100 != 0) || (y%400 == 0))? 29: 28);
-        }else {
-            return(calendar.solarMonth[ms]);
-        }
-    },
-
-    /**
      * 农历年份转换为干支纪年
      * @param  lYear 农历年的年份数
      * @return Cn string
@@ -242,18 +225,6 @@ var calendar = {
         if(zhiKey == 0) zhiKey = 12;//如果余数为0则为最后一个地支
         return calendar.Gan[ganKey-1] + calendar.Zhi[zhiKey-1];
         
-    },
-
-    /**
-     * 公历月、日判断所属星座
-     * @param  cMonth [description]
-     * @param  cDay [description]
-     * @return Cn string
-     */
-    toAstro:function(cMonth,cDay) {
-        var s   = "\u9b54\u7faf\u6c34\u74f6\u53cc\u9c7c\u767d\u7f8a\u91d1\u725b\u53cc\u5b50\u5de8\u87f9\u72ee\u5b50\u5904\u5973\u5929\u79e4\u5929\u874e\u5c04\u624b\u9b54\u7faf";
-        var arr = [20,19,21,21,21,22,23,23,23,23,22,22];
-        return s.substr(cMonth*2 - (cDay < arr[cMonth-1] ? 2 : 0),2) + "\u5ea7";//座
     },
 
     /**
@@ -352,16 +323,6 @@ var calendar = {
             s += calendar.nStr1[d%10];
         }
         return(s);
-    },
-
-    /**
-      * 年份转生肖[!仅能大致转换] => 精确划分生肖分界线是“立春”
-      * @param y year
-      * @return Cn string
-      * @eg:var animal = calendar.getAnimal(1987) ;//animal='兔'
-      */
-    getAnimal: function(y) {
-        return calendar.Animals[(y - 4) % 12]
     },
 
     /**
@@ -479,61 +440,7 @@ var calendar = {
         //日柱 当月一日与 1900/1/1 相差天数
         var dayCyclical = Date.UTC(y,sm,1,0,0,0,0)/86400000+25567+10;
         var gzD         = calendar.toGanZhi(dayCyclical+d-1);
-        //该日期所属的星座
-        var astro       = calendar.toAstro(m,d);
-        
-        return {'lYear':year,'lMonth':month,'lDay':day,'Animal':calendar.getAnimal(year),'IMonthCn':(isLeap?"\u95f0":'')+calendar.toChinaMonth(month),'IDayCn':calendar.toChinaDay(day),'cYear':y,'cMonth':m,'cDay':d,'gzYear':gzY,'gzMonth':gzM,'gzDay':gzD,'isToday':isToday,'isLeap':isLeap,'nWeek':nWeek,'ncWeek':"\u661f\u671f"+cWeek,'isTerm':isTerm,'Term':Term,'astro':astro};
-    },
 
-    /**
-      * 传入农历年月日以及传入的月份是否闰月获得详细的公历、农历object信息 <=>JSON
-      * @param y  lunar year
-      * @param m  lunar month
-      * @param d  lunar day
-      * @param isLeapMonth  lunar month is leap or not.[如果是农历闰月第四个参数赋值true即可]
-      * @return JSON object
-      * @eg:console.log(calendar.lunar2solar(1987,9,10));
-      */
-    lunar2solar:function(y,m,d,isLeapMonth) {   //参数区间1900.1.31~2100.12.1
-        var isLeapMonth = !!isLeapMonth;
-        var leapOffset  = 0;
-        var leapMonth   = calendar.leapMonth(y);
-        var leapDay     = calendar.leapDays(y);
-        if(isLeapMonth&&(leapMonth!=m)) {return -1;}//传参要求计算该闰月公历 但该年得出的闰月与传参的月份并不同
-        if(y==2100&&m==12&&d>1 || y==1900&&m==1&&d<31) {return -1;}//超出了最大极限值 
-        var day  = calendar.monthDays(y,m); 
-        var _day = day;
-        //bugFix 2016-9-25 
-        //if month is leap, _day use leapDays method 
-        if(isLeapMonth) {
-            _day = calendar.leapDays(y,m);
-        }
-        if(y < 1900 || y > 2100 || d > _day) {return -1;}//参数合法性效验
-        
-        //计算农历的时间差
-        var offset = 0;
-        for(var i=1900;i<y;i++) {
-            offset+=calendar.lYearDays(i);
-        }
-        var leap = 0,isAdd= false;
-        for(var i=1;i<m;i++) {
-            leap = calendar.leapMonth(y);
-            if(!isAdd) {//处理闰月
-                if(leap<=i && leap>0) {
-                    offset+=calendar.leapDays(y);isAdd = true;
-                }
-            }
-            offset+=calendar.monthDays(y,i);
-        }
-        //转换闰月农历 需补充该年闰月的前一个月的时差
-        if(isLeapMonth) {offset+=day;}
-        //1900年农历正月一日的公历时间为1900年1月30日0时0分0秒(该时间也是本农历的最开始起始点)
-        var stmap   =   Date.UTC(1900,1,30,0,0,0);
-        var calObj  =   new Date((offset+d-31)*86400000+stmap);
-        var cY      =   calObj.getUTCFullYear();
-        var cM      =   calObj.getUTCMonth()+1;
-        var cD      =   calObj.getUTCDate();
-
-        return calendar.solar2lunar(cY,cM,cD);
+        return {'lYear':year,'lMonth':month,'lDay':day,'IMonthCn':(isLeap?"\u95f0":'')+calendar.toChinaMonth(month),'IDayCn':calendar.toChinaDay(day),'cYear':y,'cMonth':m,'cDay':d,'gzYear':gzY,'gzMonth':gzM,'gzDay':gzD,'isToday':isToday,'isLeap':isLeap,'nWeek':nWeek,'ncWeek':"\u661f\u671f"+cWeek,'isTerm':isTerm,'Term':Term};
     }
 };
